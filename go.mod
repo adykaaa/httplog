@@ -1,4 +1,4 @@
-module github.com/adykaaa/httplog/v1
+module github.com/adykaaa/httplog
 
 go 1.14
 
