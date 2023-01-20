@@ -11,29 +11,13 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 )
-
-func NewLogger(serviceName string, opts ...Options) zerolog.Logger {
-	if len(opts) > 0 {
-		Configure(opts[0])
-	} else {
-		Configure(DefaultOptions)
-	}
-	logger := log.With().Str("service", strings.ToLower(serviceName))
-	if !DefaultOptions.Concise && len(DefaultOptions.Tags) > 0 {
-		logger = logger.Fields(map[string]interface{}{
-			"tags": DefaultOptions.Tags,
-		})
-	}
-	return logger.Logger()
-}
 
 // RequestLogger is an http middleware to log http requests and responses.
 //
 // NOTE: for simplicity, RequestLogger automatically makes use of the chi RequestID and
 // Recoverer middleware.
-func RequestLogger(logger zerolog.Logger) func(next http.Handler) http.Handler {
+func RequestLogger(logger *zerolog.Logger) func(next http.Handler) http.Handler {
 	return chi.Chain(
 		middleware.RequestID,
 		Handler(logger),
@@ -41,7 +25,7 @@ func RequestLogger(logger zerolog.Logger) func(next http.Handler) http.Handler {
 	).Handler
 }
 
-func Handler(logger zerolog.Logger) func(next http.Handler) http.Handler {
+func Handler(logger *zerolog.Logger) func(next http.Handler) http.Handler {
 	var f middleware.LogFormatter = &requestLogger{logger}
 	return func(next http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
@@ -67,7 +51,7 @@ func Handler(logger zerolog.Logger) func(next http.Handler) http.Handler {
 }
 
 type requestLogger struct {
-	Logger zerolog.Logger
+	Logger *zerolog.Logger
 }
 
 func (l *requestLogger) NewLogEntry(r *http.Request) middleware.LogEntry {
