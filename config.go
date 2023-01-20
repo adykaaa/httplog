@@ -13,8 +13,8 @@ import (
 var DefaultOptions = Options{
 	LogLevel:        "info",
 	LevelFieldName:  "level",
-	JSON:            false,
-	Concise:         false,
+	JSON:            true,
+	Concise:         true,
 	Tags:            nil,
 	SkipHeaders:     nil,
 	TimeFieldFormat: time.RFC3339Nano,
