@@ -3,4 +3,5 @@ httplog
 
 Small but powerful structured logging package for HTTP request logging in Go.
 
-I modified it so that it takes the logger as a pointer and won't have to create a new copy of it, and also set sane defaults that I'm gonna use for my project.
+Did a quick and dirty modification of this package. Now it uses a passed in configured Logger, instead of returning a new one, and taking it in as a value.
+I'm mostly using Zerolog anyways in my projects, and I'm going to configure it elsewhere, and want the logging middleware to adapt. Now it does
